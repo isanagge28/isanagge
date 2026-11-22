@@ -13,7 +13,7 @@
 В Claude Code вставь по очереди:
 
 ```
-/plugin marketplace add isanagge/isanagge
+/plugin marketplace add isanagge28/isanagge
 /plugin install isanagge@isanagge
 ```
 

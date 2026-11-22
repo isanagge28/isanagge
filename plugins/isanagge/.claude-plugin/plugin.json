@@ -7,5 +7,14 @@
     "name": "isanagge"
   },
   "license": "MIT",
-  "keywords": ["second-brain", "memory", "video", "whisper", "russian", "beginners"]
+  "keywords": [
+    "second-brain",
+    "memory",
+    "video",
+    "whisper",
+    "russian",
+    "beginners"
+  ],
+  "homepage": "https://github.com/isanagge28/isanagge",
+  "repository": "https://github.com/isanagge28/isanagge"
 }
