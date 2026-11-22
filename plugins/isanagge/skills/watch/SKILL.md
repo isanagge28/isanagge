@@ -35,7 +35,8 @@ description: Открыть и понять любую ссылку, котор�
 yt-dlp --version
 ffmpeg -version
 ```
-Нет чего-то → раздел 5 «Установка». Без `ffmpeg` можно только субтитры, без кадров и расшифровки.
+Нет чего-то → раздел 5 «Установка». Без `ffmpeg` работают субтитры и расшифровка речи; ffmpeg нужен только для кадров.
+Если ставили без пароля (раздел 5Б) и команды «не найдены» — добавь в начало команды `export PATH="$HOME/.local/bin:$PATH";` (Windows: программы в `%USERPROFILE%\.local\bin`).
 
 ### 3.2 Узнать, что за видео (без скачивания)
 ```
@@ -49,21 +50,22 @@ yt-dlp --no-playlist --skip-download --print "%(title)s | %(uploader)s | %(durat
 
 1. Субтитры (быстро, без скачивания видео):
    ```
-   yt-dlp --no-playlist --skip-download --write-subs --write-auto-subs --sub-langs "ru.*,en.*,ru,en" --sub-format "vtt/srt/best" --convert-subs srt -o "$D/video.%(ext)s" "<ссылка>"
+   yt-dlp --no-playlist --skip-download --write-subs --write-auto-subs --sub-langs "ru.*,en.*,ru,en" --sub-format "srt/vtt/best" -o "$D/video.%(ext)s" "<ссылка>"
    ```
-   Есть `.srt` → прочитай его (повторяющиеся строки автосубтитров не считай дважды).
-2. Субтитров нет (TikTok, Reels, Rutube часто без них) → скачай только звук и расшифруй:
+   Есть `.srt` или `.vtt` → прочитай его (служебные строки времени пропускай, повторяющиеся строки автосубтитров не считай дважды).
+2. Субтитров нет (TikTok, Reels, Rutube часто без них) → скачай только звук (без перекодирования — ffmpeg не нужен) и расшифруй:
    ```
-   yt-dlp --no-playlist -f "bestaudio/best" -x --audio-format m4a -o "$D/audio.%(ext)s" "<ссылка>"
+   yt-dlp --no-playlist -f "ba[ext=m4a]/ba/b" -o "$D/audio.%(ext)s" "<ссылка>"
    ```
-   затем навык `isanagge:rasshifrovka` на `$D/audio.m4a`.
+   затем навык `isanagge:rasshifrovka` на скачанный `$D/audio.*` (Whisper читает m4a, webm, mp4 сам).
 
 ### 3.4 Картинка: смотреть кадры
 Нужно, когда важно, что на экране: монтаж, дизайн, текст на экране, товар, «сделай так же», или речи в видео нет.
-1. Скачай видео в небольшом качестве:
+1. Скачай видео в небольшом качестве (звук для кадров не нужен — так не требуется склейка):
    ```
-   yt-dlp --no-playlist -f "bv*[height<=480]+ba/b[height<=480]/b" --merge-output-format mp4 -o "$D/video.%(ext)s" "<ссылка>"
+   yt-dlp --no-playlist -f "bv*[height<=480][ext=mp4]/bv*[height<=480]/b[height<=480]/b" -o "$D/video.%(ext)s" "<ссылка>"
    ```
+   Ниже вместо `video.mp4` подставь имя, которое получилось (`video.webm` и т. п.).
 2. Нарежь кадры. Шаг подбери так, чтобы вышло 12–40 кадров: короткое видео (до 1 мин) — каждую секунду, до 10 мин — каждые 10–15 с, длиннее — каждые 30–60 с:
    ```
    mkdir -p "$D/кадры"
@@ -91,13 +93,36 @@ yt-dlp --no-playlist --skip-download --print "%(title)s | %(uploader)s | %(durat
 
 ## 5. Установка (один раз, только с согласия)
 
-Скажи: «Чтобы смотреть видео по ссылкам, поставлю две бесплатные программы: yt-dlp (скачивает видео и субтитры) и ffmpeg (режет кадры и звук). Ставлю?»
+Скажи: «Чтобы смотреть видео по ссылкам, поставлю бесплатные программы: yt-dlp (скачивает видео и субтитры) и ffmpeg (режет кадры). Ставлю?»
 
-- **macOS**: есть Homebrew (`brew --version`) → `brew install yt-dlp ffmpeg`. Нет Homebrew → `python3 -m pip install --user -U yt-dlp`, а ffmpeg — предложи поставить Homebrew с brew.sh (официальный сайт) или пропусти кадры.
-- **Windows**: `winget install --id yt-dlp.yt-dlp -e` и `winget install --id Gyan.FFmpeg -e`, потом перезапусти терминал. Нет winget → `py -m pip install -U yt-dlp`, ffmpeg — с ffmpeg.org.
-- **Linux**: `python3 -m pip install --user -U yt-dlp` и `sudo apt install ffmpeg` (sudo — только если человек сам введёт пароль).
+Сначала выбери способ: есть Homebrew (`brew --version`) или winget — способ А. Нет их, человек не знает пароль от компьютера, нет прав администратора или ввести пароль не получается — сразу способ Б, без пароля.
 
-Проверь `yt-dlp --version` и `ffmpeg -version`. Whisper для расшифровки — в навыке `isanagge:rasshifrovka`.
+Пароль вводит только человек сам. Подскажи: «При вводе пароля в терминале ничего не видно — ни букв, ни точек. Набери вслепую и нажми Enter». Если и так не выходит — переходи на способ Б.
+
+### 5А. Обычная установка
+- **macOS** с Homebrew: `brew install yt-dlp ffmpeg`. Без Homebrew его ставят с brew.sh (официальный сайт) — нужен пароль от Mac; не хочется — способ Б.
+- **Windows**: `winget install --id yt-dlp.yt-dlp -e` и `winget install --id Gyan.FFmpeg -e`, потом перезапусти терминал.
+- **Linux**: `sudo apt install ffmpeg` (пароль вводит человек) и yt-dlp по способу Б.
+
+### 5Б. Без пароля (в личную папку человека)
+Всё ставится через **uv** — бесплатный установщик Python-программ от Astral (astral.sh). Ему не нужны пароль и права администратора, он не трогает систему: программы лежат в `~/.local/bin` (Windows — `%USERPROFILE%\.local\bin`). Python отдельно ставить не нужно — uv скачает свой.
+
+1. uv (официальный установщик; сам допишет `~/.local/bin` в PATH для новых окон терминала):
+   - macOS / Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`
+   - Windows (PowerShell): `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
+   В этом же окне терминала дальше пиши `export PATH="$HOME/.local/bin:$PATH"` (Windows — открой новое окно).
+2. yt-dlp: `uv tool install yt-dlp` (обновлять: `uv tool upgrade yt-dlp`).
+3. ffmpeg — готовая сборка из пакета imageio-ffmpeg (есть для Mac на Apple Silicon и Intel, Windows, Linux). Узнай, где он лёг:
+   ```
+   uv run --with imageio-ffmpeg python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"
+   ```
+   и сделай ярлык под обычным именем:
+   - macOS / Linux: `ln -sf "<путь из вывода>" "$HOME/.local/bin/ffmpeg"`
+   - Windows: `copy "<путь из вывода>" "%USERPROFILE%\.local\bin\ffmpeg.exe"`
+   (В этой сборке нет ffprobe — для этого навыка он не нужен.)
+4. Whisper — см. навык `isanagge:rasshifrovka`, раздел «Без пароля».
+
+Проверь `yt-dlp --version` и `ffmpeg -version`. Если `uv` не найден сразу после установки — открой новое окно терминала или используй полный путь `~/.local/bin/uv`.
 
 ## Если не получается
 
