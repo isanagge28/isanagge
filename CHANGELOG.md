@@ -14,4 +14,4 @@
 - Знакомство: человек рассказывает о себе, Claude подстраивается.
 - Навыки: `start`, `novyy-proekt`, `zapomni-priem`, `itog-nedeli`, `rasshifrovka`.
 - Расшифровка голосовых через Whisper — бесплатно и без интернета.
-- Навыки по видео (HyperFrames, GSAP), текстам (humanizer), анализу (data-analysis, graphify, security-audit), поиск навыков (find-skills).
+- Навыки по видео (HyperFrames, GSAP), текстам (humanizer), анализу (data-analysis, security-audit; graphify ставится при первом запуске), поиск навыков (find-skills).

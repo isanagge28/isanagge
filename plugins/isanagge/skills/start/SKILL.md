@@ -73,7 +73,7 @@ description: Первый запуск Isana — создать папку «В�
 
 ## Шаг 5. Навыки под дело человека
 
-Уже есть в Isana (ставить не нужно): видео (`hyperframes`, `gsap-*`, `slideshow`, `reverse-any-video`, `media-use`, `figma`, `style-sampling`), тексты (`humanizer`), анализ (`data-analysis`, `graphify`, `security-audit`), поиск навыков (`find-skills`), свои: `novyy-proekt`, `zapomni-priem`, `itog-nedeli`, `rasshifrovka`.
+Уже есть в Isana (ставить не нужно): видео (`hyperframes`, `gsap-*`, `slideshow`, `reverse-any-video`, `media-use`, `figma`, `style-sampling`), тексты (`humanizer`), анализ (`data-analysis`, `security-audit`), поиск навыков (`find-skills`), свои: `novyy-proekt`, `zapomni-priem`, `itog-nedeli`, `rasshifrovka`.
 
 По рассказу человека назови 2–4 самых полезных именно ему, одной строкой каждый, с примером из его дела. Если нужного нет — найди через `find-skills` и предложи (ставить только с согласия).
 
@@ -84,7 +84,7 @@ description: Первый запуск Isana — создать папку «В�
 1. **graphify** (рекомендую всем) — карта знаний по папке. Нужен Python 3.10+.
    - Проверь: `python --version` (на Windows ещё `py --version`).
    - Нет Python → скажи, где взять (python.org, при установке отметить «Add to PATH»), и пропусти шаг.
-   - Есть → `python -m pip install --upgrade graphifyy` (пакет называется именно `graphifyy`), проверь `graphify --help`.
+   - Есть → `python -m pip install --upgrade graphifyy` (пакет называется именно `graphifyy`), затем `graphify install` (сам подключит навык к Claude Code). Проверь `graphify --help`. Навык заработает в новой сессии: `/graphify .` в любой папке строит карту знаний.
 2. **Whisper для голосовых** — см. навык `isanagge:rasshifrovka`, раздел «Установка». Предложи, если человек будет присылать голосовые или работать с видео.
 3. **Remotion** (если человек делает видео) — ставится только из источника и только если есть Node.js: `npx -y skills add remotion-dev/skills -g -y`. Нет Node — пропусти и скажи, что hyperframes уже умеет почти всё.
 4. **Плагины** (по желанию). Если в терминале доступна команда `claude` — поставь сам; иначе дай человеку вставить строки в Claude Code:
