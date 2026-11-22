@@ -50,8 +50,9 @@ yt-dlp --no-playlist --skip-download --print "%(title)s | %(uploader)s | %(durat
 
 1. Субтитры (быстро, без скачивания видео):
    ```
-   yt-dlp --no-playlist --skip-download --write-subs --write-auto-subs --sub-langs "ru.*,en.*,ru,en" --sub-format "srt/vtt/best" -o "$D/video.%(ext)s" "<ссылка>"
+   yt-dlp --no-playlist --skip-download --write-subs --write-auto-subs --sub-langs "ru,en,ru-orig,en-orig" --sub-format "srt/vtt/best" -o "$D/video.%(ext)s" "<ссылка>"
    ```
+   Не ставь шаблоны вроде `ru.*` — они тянут автопереводы субтитров, и YouTube отвечает `HTTP Error 429`.
    Есть `.srt` или `.vtt` → прочитай его (служебные строки времени пропускай, повторяющиеся строки автосубтитров не считай дважды).
 2. Субтитров нет (TikTok, Reels, Rutube часто без них) → скачай только звук (без перекодирования — ffmpeg не нужен) и расшифруй:
    ```
@@ -100,8 +101,10 @@ yt-dlp --no-playlist --skip-download --print "%(title)s | %(uploader)s | %(durat
 Пароль вводит только человек сам. Подскажи: «При вводе пароля в терминале ничего не видно — ни букв, ни точек. Набери вслепую и нажми Enter». Если и так не выходит — переходи на способ Б.
 
 ### 5А. Обычная установка
-- **macOS** с Homebrew: `brew install yt-dlp ffmpeg`. Без Homebrew его ставят с brew.sh (официальный сайт) — нужен пароль от Mac; не хочется — способ Б.
-- **Windows**: `winget install --id yt-dlp.yt-dlp -e` и `winget install --id Gyan.FFmpeg -e`, потом перезапусти терминал.
+- **macOS** с Homebrew: `brew install yt-dlp ffmpeg deno`. Без Homebrew его ставят с brew.sh (официальный сайт) — нужен пароль от Mac; не хочется — способ Б.
+- **Windows**: `winget install --id yt-dlp.yt-dlp -e`, `winget install --id Gyan.FFmpeg -e` и `winget install --id DenoLand.Deno -e`, потом перезапусти терминал.
+
+deno — движок JavaScript, без него yt-dlp плохо работает с YouTube (предупреждение `No supported JavaScript runtime`).
 - **Linux**: `sudo apt install ffmpeg` (пароль вводит человек) и yt-dlp по способу Б.
 
 ### 5Б. Без пароля (в личную папку человека)
@@ -111,13 +114,18 @@ yt-dlp --no-playlist --skip-download --print "%(title)s | %(uploader)s | %(durat
    - macOS / Linux: `curl -LsSf https://astral.sh/uv/install.sh | sh`
    - Windows (PowerShell): `powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"`
    В этом же окне терминала дальше пиши `export PATH="$HOME/.local/bin:$PATH"` (Windows — открой новое окно).
-2. yt-dlp: `uv tool install yt-dlp` (обновлять: `uv tool upgrade yt-dlp`).
+2. yt-dlp и deno (движок JavaScript для YouTube):
+   ```
+   uv tool install "yt-dlp[default]"
+   uv tool install deno
+   ```
+   Обновлять: `uv tool upgrade yt-dlp`.
 3. ffmpeg — готовая сборка из пакета imageio-ffmpeg (есть для Mac на Apple Silicon и Intel, Windows, Linux). Узнай, где он лёг:
    ```
    uv run --with imageio-ffmpeg python -c "import imageio_ffmpeg; print(imageio_ffmpeg.get_ffmpeg_exe())"
    ```
-   и сделай ярлык под обычным именем:
-   - macOS / Linux: `ln -sf "<путь из вывода>" "$HOME/.local/bin/ffmpeg"`
+   и **скопируй** (не ярлык: файл лежит в кэше uv, его могут почистить) под обычным именем:
+   - macOS / Linux: `cp "<путь из вывода>" "$HOME/.local/bin/ffmpeg" && chmod +x "$HOME/.local/bin/ffmpeg"`
    - Windows: `copy "<путь из вывода>" "%USERPROFILE%\.local\bin\ffmpeg.exe"`
    (В этой сборке нет ffprobe — для этого навыка он не нужен.)
 4. Whisper — см. навык `isanagge:rasshifrovka`, раздел «Без пароля».
