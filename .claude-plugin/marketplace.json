@@ -1,0 +1,15 @@
+{
+  "name": "isanagge",
+  "description": "Isana — Второй мозг для Claude: память, проекты, видео, тексты, расшифровка голосовых",
+  "owner": {
+    "name": "isanagge"
+  },
+  "plugins": [
+    {
+      "name": "isanagge",
+      "source": "./plugins/isanagge",
+      "description": "Второй мозг: папка с памятью, знакомство, самоулучшение, видео, тексты, анализ и расшифровка голосовых",
+      "version": "0.1.0"
+    }
+  ]
+}

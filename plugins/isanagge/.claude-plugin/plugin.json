@@ -1,0 +1,11 @@
+{
+  "name": "isanagge",
+  "version": "0.1.0",
+  "displayName": "Isana — Второй мозг",
+  "description": "Второй мозг: папка с памятью, знакомство, самоулучшение, видео, тексты, анализ и расшифровка голосовых",
+  "author": {
+    "name": "isanagge"
+  },
+  "license": "MIT",
+  "keywords": ["second-brain", "memory", "video", "whisper", "russian", "beginners"]
+}
